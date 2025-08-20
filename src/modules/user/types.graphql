@@ -1,0 +1,11 @@
+type User2{
+    id:ID!
+    name:String!
+    email:String!
+}
+type customError {
+    message: String!
+    code: Int!
+}
+
+union userResult = User2 | customError 
