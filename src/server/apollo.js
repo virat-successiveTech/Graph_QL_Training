@@ -1,8 +1,8 @@
-import { ApolloServer } from '@apollo/server';
+import { createApolloServer } from "./express.js";
 
-export const createApolloServer = (schema) => {
-  return new ApolloServer({
-    schema,
-    introspection: true, // Enable introspection for GraphQL Playground
-  });
-};
+const httpServer = await createApolloServer(4000);
+
+httpServer.listen(4000, () => {
+  console.log(`🚀 Query/Mutation endpoint: http://localhost:4000/graphql`);
+  console.log(`🚀 Subscription endpoint: ws://localhost:4000/graphql`);
+});
