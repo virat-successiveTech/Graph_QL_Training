@@ -14,6 +14,6 @@ export const posts = [
 ];
 
 export const comments = [
-  { id: "1", text: "Nice post!", postId: "1", userId: "2" },
-  { id: "2", text: "Very helpful.", postId: "2", userId: "1" },
+  { id: "1", text: "Nice post!", postId: "1", authorId: "2" },
+  { id: "2", text: "Very helpful.", postId: "2", authorId: "1" },
 ];

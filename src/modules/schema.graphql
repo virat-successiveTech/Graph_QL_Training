@@ -1,19 +1,27 @@
 type Query {
   messages: [Message!]!
-  getUsers: [User!]!
+    getUsers: [User!]!
   getUserById(id: ID!): User
-  getPosts: [Post!]!
+
+   getPosts(page: Int, limit: Int, sortBy: String, sortOrder: String): PaginatedPosts!
   getPostById(id: ID!): Post
-  getPostsByUserId(userId: ID!): [Post!]!
-  getComments: [Comment!]!
-  getCommentsByPostId(postId: ID!): [Comment!]!
-  getUserByComment(comment: CommentInput!): User
-  getAuthorOfPost(post: PostInput!): User
+   getPostsByUserId(userId: ID!, page: Int, limit: Int, sortBy: String, sortOrder: String): PaginatedPosts!
+
+    getComments(page: Int, limit: Int, sortBy: String, sortOrder: String): PaginatedComments!
+    getCommentsByPostId(postId: ID!, page: Int, limit: Int, sortBy: String, sortOrder: String): PaginatedComments!
+
+  getUserByComment(commentId: ID!): User
+  getAuthorOfPost(postId: ID!): User
+  getUsers2:[User2]
+  getUsersById2(id:ID!):userResult!
 }
 
 type Mutation {
   postMessage(content: String!, author: String!, title: String!): Message!
-  createPost(title: String!, content: String!, authorId: ID!): Post!
+  createPost(title: String, content: String, authorId: ID,commentId:ID): Post
+  updateUser(userId: ID!, newInfo: UpdateUserInput!): User!
+  deleteComment(commentId: ID!): Boolean!
+  createComment(postId:ID!, content:String, authorId:ID!): Comment!
 }
 
 input CommentInput {
@@ -28,4 +36,10 @@ input PostInput {
   title: String!
   content: String!
   authorId: ID!
+}
+
+input UpdateUserInput {
+  username: String
+  email: String
+  password: String
 }
