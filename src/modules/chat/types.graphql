@@ -1,0 +1,21 @@
+type ChatUser {
+  id: ID!
+  username: String!
+  status: String 
+}
+
+type ChatMessage {
+  id: ID!
+  content: String!    
+  timestamp: String!
+  sender: ChatUser!
+}
+
+type AuthPayload {
+  token: String!
+  user: ChatUser!
+}
+
+type LogoutResponse {
+  message: String!
+}

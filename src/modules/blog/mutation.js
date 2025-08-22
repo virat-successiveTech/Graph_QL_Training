@@ -1,6 +1,6 @@
-import { posts, users, comments } from "./dataSource.js";
+import { User, Post, Comment } from "../../models/blogModel.js";
 
-// Utility delay function
+// Utility delay function (optional)
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 export const blogMutation = {
@@ -8,71 +8,78 @@ export const blogMutation = {
     await delay(1000); // Simulate delay
     console.log("working");
 
-    // Validate author exists
-    const author = users.find(user => user.id === authorId);
+    // Validate author exists in DB
+    const author = await User.findById(authorId);
     if (!author) {
       throw new Error("Author not found");
     }
 
-    const newPost = {
-      id: String(posts.length + 1),
+    // Create and save new post
+    const newPost = new Post({
       title,
       content,
       authorId,
-    };
+    });
 
-    posts.push(newPost);
+    await newPost.save();
+
     return newPost;
   },
 
-  createComment: async (_, { postId, content, authorId }) => {
+  createComment: async (_, { postId, content, authorId }, { pubsub }) => {
     await delay(1000); // Simulate delay
 
     // Validate post exists
-    const post = posts.find(p => p.id === postId);
+    const post = await Post.findById(postId);
     if (!post) {
       throw new Error("Post not found");
     }
 
     // Validate author exists
-    const author = users.find(user => user.id === authorId);
+    const author = await User.findById(authorId);
     if (!author) {
       throw new Error("Author not found");
     }
 
-    const newComment = {
-      id: String(comments.length + 1),
+    // Create and save comment
+    const newComment = new Comment({
       postId,
-      content,
+      text: content,  // assuming your Comment schema uses 'text' for content
       authorId,
-      createdAt: new Date().toISOString(),
-    };
+      createdAt: new Date(),
+    });
 
-    comments.push(newComment);
+    await newComment.save();
+
+    // Publish subscription event
+    pubsub.publish(`COMMENT_ADDED`, { commentAdded: newComment });
+
     return newComment;
   },
 
   updateUser: async (_, { userId, newInfo }) => {
     await delay(1000); // Simulate delay
 
-    const user = users.find(u => u.id === userId);
+    // Find user and update with newInfo
+    const user = await User.findById(userId);
     if (!user) {
       throw new Error("User not found");
     }
 
     Object.assign(user, newInfo);
+    await user.save();
+
     return user;
   },
 
   deleteComment: async (_, { commentId }) => {
     await delay(1000); // Simulate delay
 
-    const commentIndex = comments.findIndex(c => c.id === commentId);
-    if (commentIndex === -1) {
+    const deletedComment = await Comment.findByIdAndDelete(commentId);
+    if (!deletedComment) {
       throw new Error("Comment not found");
     }
 
-    const deletedComment = comments.splice(commentIndex, 1)[0];
-    return deletedComment ? true : false;
+    return true;
   },
 };

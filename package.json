@@ -4,16 +4,17 @@
   "main": "express.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start" : "node index.js",
-    "dev":"nodemon"
+    "start": "node apollo.js",
+    "dev": "nodemon"
   },
-  "type":"module",
+  "type": "module",
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
     "@apollo/server": "^5.0.0",
+    "@as-integrations/express5": "^1.1.2",
     "@graphql-tools/graphql-file-loader": "^8.0.22",
     "@graphql-tools/load": "^8.1.2",
     "@graphql-tools/load-files": "^7.0.1",
@@ -21,8 +22,13 @@
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "graphql": "^16.11.0",
+    "graphql-subscriptions": "^3.0.0",
+    "graphql-ws": "^6.0.6",
     "i": "^0.3.7",
-    "npm": "^11.5.2"
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.17.2",
+    "npm": "^11.5.2",
+    "ws": "^8.18.3"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"

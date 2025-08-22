@@ -14,6 +14,10 @@ type Query {
   getAuthorOfPost(postId: ID!): User
   getUsers2:[User2]
   getUsersById2(id:ID!):userResult!
+  chatUsers: [ChatUser!]!
+  chatMessages: [ChatMessage!]!
+  allMessages: [ChatMessage!]!
+  
 }
 
 type Mutation {
@@ -22,6 +26,17 @@ type Mutation {
   updateUser(userId: ID!, newInfo: UpdateUserInput!): User!
   deleteComment(commentId: ID!): Boolean!
   createComment(postId:ID!, content:String, authorId:ID!): Comment!
+  register(username: String!, password: String!): ChatUser!
+  login(username: String!, password: String!): AuthPayload!
+  logout: LogoutResponse!
+  sendMessage(content: String!): ChatMessage!
+  
+}
+
+type Subscription {
+  messagePosted: Message!
+  commentAdded: Comment!
+  userStatusChanged: ChatUser!
 }
 
 input CommentInput {
