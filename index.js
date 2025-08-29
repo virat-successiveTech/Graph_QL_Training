@@ -1,17 +1,20 @@
-import { ApolloServer } from "@apollo/server";
-import { startStandaloneServer } from "@apollo/server/standalone";
-import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
-import { typeDefs } from "./src/schema/typeDefs.js";
-import { resolvers } from "./src/schema/resolvers.js";
+import { createApolloServer } from "./src/server/express.js";
+import { connectDB } from "./src/db/db.js";
 
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  plugins: [ApolloServerPluginLandingPageLocalDefault()],
+async function start() {
+  // Connect to MongoDB first
+  await connectDB();
+  console.log("Database connection established");
+  const httpServer = await createApolloServer(4000);
+
+  // Start listening only after DB connection
+  httpServer.listen(4001, () => {
+    console.log(`🚀 Query/Mutation endpoint: http://localhost:4001/graphql`);
+    console.log(`🚀 Subscription endpoint: ws://localhost:4001/graphql`);
+  });
+}
+
+start().catch((err) => {
+  console.error("Failed to start server:", err);
+  process.exit(1);
 });
-
-const { url } = await startStandaloneServer(server, {
-  listen: { port: 3000 },
-});
-
-console.log(`🚀 Server ready at ${url}`);

@@ -1,5 +1,6 @@
 import { blogModule } from "../modules/blog/index.js";
 import { blogFieldResolvers } from "../modules/blog/nestedResolver.js";
+import { chatModule } from "../modules/chat/index.js";
 import { messageModule } from "../modules/message/index.js";
 import { userModule } from "../modules/user/index.js";
 
@@ -8,12 +9,19 @@ export const resolvers = {
         ...messageModule.Query,
         ...blogModule.Query,
         ...userModule.Query,
+        ...chatModule.Query
     },
     Mutation:{
         ...messageModule.Mutation,
-        ...blogModule.Mutation
+        ...blogModule.Mutation,
+        ...chatModule.Mutation,
     },
     ...blogFieldResolvers,
+    Subscription: {
+        ...messageModule.Subscription,
+        ...blogModule.Subscription,
+        ...chatModule.Subscription,
+    },
 
     
 
